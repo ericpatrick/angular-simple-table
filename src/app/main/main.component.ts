@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { Sort, SortDirection } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -44,8 +44,8 @@ export class MainComponent implements OnInit {
     this.form.reset();
   }
 
-  public filterTableData(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  public filterTableData(event: { target: { value: string } }) {
+    const filterValue = event.target.value;
     this.tableData.filter = filterValue.trim().toLowerCase();
   }
 
@@ -73,37 +73,6 @@ export class MainComponent implements OnInit {
       this.tableData.data.splice(index, 1);
       this.table.renderRows();
     }
-  }
-
-  private resetForm(form: FormGroup, value?: any): void {
-    let controls: AbstractControl[] = [];
-    form.reset(value); // Limpar os campos
-    controls = controls.concat(this.getControls(form));
-    while (controls.length > 0) {
-      const control = controls.shift();
-      if (control instanceof FormArray) {
-        const formArray = control;
-        controls = controls.concat(formArray.controls);
-      } else if (control instanceof FormGroup) {
-        const formGroup = control;
-        controls = controls.concat(this.getControls(formGroup));
-      }
-      control.setErrors(null);
-    }
-    form.setErrors(null);
-    form.reset(value); // Controles recalculados
-  }
-
-  private getControls(form: {
-    controls: { [key: string]: AbstractControl };
-  }): AbstractControl[] {
-    const controls: AbstractControl[] = [];
-    for (const x in form.controls) {
-      if (form.controls[x]) {
-        controls.push(form.controls[x]);
-      }
-    }
-    return controls;
   }
 
   private dataSortFunc(

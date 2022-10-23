@@ -5,7 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
+    "test-watch": "jest --coverage --detectOpenHandles --watch",
+    "test-coverage": "jest --coverage --detectOpenHandles",
     "lint": "ng lint",
     "cy:run": "cypress run",
     "cy:open": "cypress open"
